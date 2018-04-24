@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+from past.builtins import xrange
 
 import numpy as np
 
@@ -31,27 +33,27 @@ accuracy_training = np.zeros(ensemble_size)
 accuracy_test = np.zeros(ensemble_size)
 
 for ensemble in xrange(ensemble_size):
-	print "ENSEMBLE", ensemble + 1
-	print 
+    print("ENSEMBLE", ensemble + 1)
+    print()
 
-	np.random.shuffle(data)
+    np.random.shuffle(data)
 
-	X_training = data[:int(data.shape[0]*0.8),0:16] # Input features
-	y_training = data[:int(data.shape[0]*0.8),16] # Target value
+    X_training = data[:int(data.shape[0]*0.8),0:16] # Input features
+    y_training = data[:int(data.shape[0]*0.8),16] # Target value
 
-	X_test = data[int(data.shape[0]*0.8):,0:16] # Input features
-	y_test = data[int(data.shape[0]*0.8):,16] # Target value
+    X_test = data[int(data.shape[0]*0.8):,0:16] # Input features
+    y_test = data[int(data.shape[0]*0.8):,16] # Target value
 
-	# This is a multiclass variant of the Tsetlin Machine, capable of distinguishing between multiple classes
-	tsetlin_machine = MultiClassTsetlinMachine.MultiClassTsetlinMachine(number_of_classes, number_of_clauses, number_of_features, states, s, T, boost_true_positive_feedback = 1)
+    # This is a multiclass variant of the Tsetlin Machine, capable of distinguishing between multiple classes
+    tsetlin_machine = MultiClassTsetlinMachine.MultiClassTsetlinMachine(number_of_classes, number_of_clauses, number_of_features, states, s, T, boost_true_positive_feedback = 1)
 
-	# Training of the Tsetlin Machine in batch mode. The Tsetlin Machine can also be trained online
-	tsetlin_machine.fit(X_training, y_training, y_training.shape[0], epochs=epochs)
+    # Training of the Tsetlin Machine in batch mode. The Tsetlin Machine can also be trained online
+    tsetlin_machine.fit(X_training, y_training, y_training.shape[0], epochs=epochs)
 
-	# Some performacne statistics
-	accuracy_test[ensemble] = tsetlin_machine.evaluate(X_test, y_test, y_test.shape[0])
-	accuracy_training[ensemble] = tsetlin_machine.evaluate(X_training, y_training, y_training.shape[0])
+    # Some performacne statistics
+    accuracy_test[ensemble] = tsetlin_machine.evaluate(X_test, y_test, y_test.shape[0])
+    accuracy_training[ensemble] = tsetlin_machine.evaluate(X_training, y_training, y_training.shape[0])
 
-	print "Average accuracy on test data: %.1f +/- %.1f" % (np.mean(100*accuracy_test[:ensemble+1]), 1.96*np.std(100*accuracy_test[:ensemble+1])/np.sqrt(ensemble+1))
-	print "Average accuracy on training data: %.1f +/- %.1f" % (np.mean(100*accuracy_training[:ensemble+1]), 1.96*np.std(100*accuracy_training[:ensemble+1])/np.sqrt(ensemble+1))
-	print
+    print("Average accuracy on test data: %.1f +/- %.1f" % (np.mean(100*accuracy_test[:ensemble+1]), 1.96*np.std(100*accuracy_test[:ensemble+1])/np.sqrt(ensemble+1)))
+    print("Average accuracy on training data: %.1f +/- %.1f" % (np.mean(100*accuracy_training[:ensemble+1]), 1.96*np.std(100*accuracy_training[:ensemble+1])/np.sqrt(ensemble+1)))
+    print()
